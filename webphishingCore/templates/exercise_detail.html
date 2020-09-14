@@ -1,0 +1,35 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+    <h1>{{ exercise.name }}</h1>
+    <p>{{ exercise.client }} </p>
+    <p>{{ exercise.description }} </p>
+
+    <h3>Lista de empleados</h3>
+    <a href="{% url 'add_employees' client_pk=exercise.client.pk exercise_pk=exercise.pk %}"><span>Cargar empleados</span></a>
+    
+    <table style="text-align: justify;">
+        <tr>
+            <th>Todos</th>
+            <th>Indice</th>
+            <th>Email</th>
+            <th>Datos</th>
+            <th>Recibido</th>
+            <th>Leido</th>
+            <th>Click</th>
+        </tr>
+        {% for employees in employees_list %}
+            <tr>
+                <th><input type="checkbox"></th>
+                <th>{{ forloop.counter }}</th>
+                <th>{{ employees.email }}</th>
+                <th>{{ employees.data }}</th>
+                <th>{{ employees.received }}</th>
+                <th>{{ employees.read }}</th>
+                <th>{{ employees.click }}</th>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock content %}

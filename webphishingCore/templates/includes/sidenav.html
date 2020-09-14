@@ -1,0 +1,59 @@
+		<!-- Sidebar -->
+		<div class="sidebar sidebar-style-2" data-background-color="">
+					
+			<div class="sidebar-wrapper scrollbar scrollbar-inner">
+				<div class="sidebar-content">
+					
+						<ul class="nav nav-primary">
+							
+							<li class="nav-section mt-4">
+								<span class="sidebar-mini-icon">
+									<i class="fa fa-ellipsis-h"></i>
+								</span>
+								<h4 class="text-section">Componentes</h4>
+							</li>					
+
+							<li class="nav-item">
+								<a class="nav-link" href="">
+									<i class="fas fa-user-circle"></i>
+									<p>Administración Clientes</p>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'campaign_list' %}">
+								  <i class="fas fa-filter"></i>
+								  <p>Administracion de campañas</p>
+								</a>
+							</li>
+
+							<li><hr noshade="noshade" width="90%"></li>	
+
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'client_list' %}">
+									<i class="fas fa-fingerprint"></i>
+									<p>Clientes</p>
+								</a>
+							</li>
+
+							<li><hr noshade="noshade" width="90%"></li>										
+
+							<li class="nav-item ">
+							  	<a class="nav-link" href="" >
+									<i class="fas fa-sign-out-alt"></i>
+									<p>Cerrar sesión</p>
+							  	</a>
+							</li>
+						</ul>
+					
+
+				</div>
+			</div>
+		</div>
+		<!-- End Sidebar -->
+		{% block javascripts %}
+
+
+
+		{% endblock javascripts %}
+

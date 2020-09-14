@@ -1,0 +1,18 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+    <h2>Lista de campañas</h2>
+    <a href="{% url 'add_campaign' %}"><span>Crear campaña</span></a>
+   
+    {% for campaign in campaign_list %}
+
+        <div style="background-color: cornflowerblue;">
+            <p>{{ campaign.name }}</p>
+            <p>{{ campaign.campaigdescription }}</p>
+            <a href="{% url 'campaign_detail' campaign_pk=campaign.pk %}"><span>Detalles</span></a>
+        </div>
+
+    {% endfor %}
+
+{% endblock content %}

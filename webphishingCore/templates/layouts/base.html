@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+	<meta charset="utf-8" />
+	<link rel="apple-touch-icon" sizes="76x76" href="/static/assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" href="/static/assets/favicon.png">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>
+	  Cybertrust Center - {% block title %}{% endblock %} | Cybertrust.cl
+	</title>
+  
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  
+
+
+	<!-- Fonts and icons -->
+	<script src="/static/assets/js/plugin/webfont/webfont.min.js"></script>
+
+	<script>
+		WebFont.load({
+			google: {"families":["Lato:300,400,700,900"]},
+			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], 
+			urls: ['/static/assets/css/fonts.min.css']},
+			active: function() {
+				sessionStorage.fonts = true;
+			}
+		});
+	</script>
+
+	<!-- CSS Files -->
+	<link rel="stylesheet" href="/static/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/assets/css/atlantis.min.css">
+	<link href="/static/assets/css/custom_cyber.css" rel="stylesheet" />
+
+	<!-- JS Libraries -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js" integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo=" crossorigin="anonymous"></script>
+	<script>moment.locale('es');</script>
+	
+
+    <!-- Specific CSS goes HERE -->
+    {% block stylesheets %}{% endblock stylesheets %}
+
+</head>
+<body data-background-color="">
+
+	<div class="wrapper {% block layout %}{% endblock layout %}">
+
+		{% include 'includes/navigation.html' %}
+
+		{% include 'includes/sidenav.html' %}
+
+		<div class="main-panel">
+
+			<div class="content">
+
+				{% block content %}{% endblock content %}
+			
+			</div>
+
+			{% include 'includes/footer.html' %}
+
+		</div>
+		
+	</div>
+
+	{% include 'includes/scripts.html' %}
+
+	<!-- Specific JS goes HERE -->
+    {% block javascripts %}{% endblock javascripts %}
+	
+</body>
+</html>

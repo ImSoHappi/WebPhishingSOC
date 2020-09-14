@@ -1,0 +1,19 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+    <h2>{{ client.name }}</h2>
+    <a href="{% url 'add_exercise' client_pk=client.pk %}"><span>Crear ejercicio</span></a>
+   
+    {% for exercise in exercise_list %}
+
+        <div style="background-color: cornflowerblue;">
+            <p>{{ exercise.name }}</p>
+            <p>{{ exercise.description }}</p>
+            <p>{{ exercise.campaigns }}</p>
+            <a href="{% url 'exercise_detail' client_pk=exercise.client.pk exercise_pk=exercise.pk%}"><span>Detalles</span></a>
+        </div>
+
+    {% endfor %}
+
+{% endblock content %}

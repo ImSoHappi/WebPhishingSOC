@@ -1,0 +1,66 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Listado Clientes {% endblock title %}
+
+{% block content %}
+
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">Listado Clientes</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="{% url 'client_list' %} ">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <a href="{% url 'add_client' %}"><span>Crear clientes</span></a>
+
+    <div class="row">
+
+        {% for client in client_list %}
+            {% if client.disabled == False %}
+                <div class="col-md-4">
+                    <div class="card card-profile">
+                        <div class="card-header" style="background: linear-gradient(-45deg, #0A5A97, #48ABF7);">
+                            <div class="profile-picture">
+                                <div class="avatar avatar-xl">
+                                    <img src="/static/assets/img/download.png" alt="..." class="avatar-img rounded-circle">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="user-profile text-center">
+                                <div class="name"><a href="{% url 'exercise_list' client_pk=client.pk %}"><h4>{{ client.name }}</h4></a></div>
+                                <div class="job">{{ client.email }}</div>
+                                <div class="desc">{{ client.description }}</div>
+                                <div class="social-media">
+                                    <a class="btn btn-info btn-twitter btn-sm btn-link" href="#"> 
+                                        <span class="btn-label just-icon"><i class="flaticon-twitter"></i> </span>
+                                    </a>
+                                    <a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#"> 
+                                        <span class="btn-label just-icon"><i class="flaticon-google-plus"></i> </span> 
+                                    </a>
+                                    <a class="btn btn-primary btn-sm btn-link" rel="publisher" href="#"> 
+                                        <span class="btn-label just-icon"><i class="flaticon-facebook"></i> </span> 
+                                    </a>
+                                    <a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#"> 
+                                        <span class="btn-label just-icon"><i class="flaticon-dribbble"></i> </span> 
+                                    </a>
+                                </div>
+                                <div class="view-profile">
+                                    <a href="#" class="btn btn-secondary btn-block">View Full Profile</a>
+                                </div>
+                            </div>                        
+                        </div>                       
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock content %}
