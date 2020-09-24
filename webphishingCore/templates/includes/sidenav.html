@@ -10,43 +10,76 @@
 								<span class="sidebar-mini-icon">
 									<i class="fa fa-ellipsis-h"></i>
 								</span>
-								<h4 class="text-section">Componentes</h4>
+								<h4 class="text-section">Administración</h4>
 							</li>					
 
 							<li class="nav-item">
 								<a class="nav-link" href="">
-									<i class="fas fa-user-circle"></i>
-									<p>Administración Clientes</p>
+									<i class="fas fa-user-cog"></i>
+									<p>Administración clientes</p>
 								</a>
 							</li>
 
 							<li class="nav-item">
 								<a class="nav-link" href="{% url 'campaign_list' %}">
-								  <i class="fas fa-filter"></i>
-								  <p>Administracion de campañas</p>
+								  <i class="fas fa-edit"></i>
+								  <p>Administración campañas</p>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'campaign_list' %}">
+								  <i class="fas fa-cogs"></i>
+								  <p>Administración fishing hooks</p>
 								</a>
 							</li>
 
 							<li><hr noshade="noshade" width="90%"></li>	
 
+							<li class="nav-section mt-4">
+								<span class="sidebar-mini-icon">
+									<i class="fa fa-ellipsis-h"></i>
+								</span>
+								<h4 class="text-section">Listados</h4>
+							</li>	
+
 							<li class="nav-item">
 								<a class="nav-link" href="{% url 'client_list' %}">
-									<i class="fas fa-fingerprint"></i>
+									<i class="fas fa-users"></i>
 									<p>Clientes</p>
 								</a>
 							</li>
 
-							<li><hr noshade="noshade" width="90%"></li>										
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'campaign_list' %}">
+									<i class="fas fa-align-left"></i>
+									<p>Campañas</p>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'fishinghook_list' %}">
+									<i class="fas fa-fish"></i>
+									<p>Fishing Hooks</p>
+								</a>
+							</li>
+
+							<li><hr noshade="noshade" width="90%"></li>		
+							
+							<li class="nav-section mt-4">
+								<span class="sidebar-mini-icon">
+									<i class="fa fa-ellipsis-h"></i>
+								</span>
+								<h4 class="text-section">Sesion</h4>
+							</li>
 
 							<li class="nav-item ">
-							  	<a class="nav-link" href="" >
+							  	<a class="nav-link" href="{% url 'logout' %}" >
 									<i class="fas fa-sign-out-alt"></i>
 									<p>Cerrar sesión</p>
 							  	</a>
 							</li>
 						</ul>
-					
-
 				</div>
 			</div>
 		</div>
@@ -56,4 +89,3 @@
 
 
 		{% endblock javascripts %}
-

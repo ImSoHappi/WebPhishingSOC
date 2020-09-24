@@ -1,35 +1,158 @@
 {% extends 'layouts/base.html' %}
 
+{% block title %} Detalle ejercicio {{ exercise.name }} {% endblock title %}
+
 {% block content %}
 
-    <h1>{{ exercise.name }}</h1>
-    <p>{{ exercise.client }} </p>
-    <p>{{ exercise.description }} </p>
+<div class="page-inner">
 
-    <h3>Lista de empleados</h3>
-    <a href="{% url 'add_employees' client_pk=exercise.client.pk exercise_pk=exercise.pk %}"><span>Cargar empleados</span></a>
-    
-    <table style="text-align: justify;">
-        <tr>
-            <th>Todos</th>
-            <th>Indice</th>
-            <th>Email</th>
-            <th>Datos</th>
-            <th>Recibido</th>
-            <th>Leido</th>
-            <th>Click</th>
-        </tr>
-        {% for employees in employees_list %}
-            <tr>
-                <th><input type="checkbox"></th>
-                <th>{{ forloop.counter }}</th>
-                <th>{{ employees.email }}</th>
-                <th>{{ employees.data }}</th>
-                <th>{{ employees.received }}</th>
-                <th>{{ employees.read }}</th>
-                <th>{{ employees.click }}</th>
-            </tr>
-        {% endfor %}
-    </table>
+    <div class="page-header">
+        <h4 class="page-title">Ejercicio <span style="text-transform: uppercase;">{{ exercise.name }}</span></h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="{% url 'client_list' %}">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'client_list' %}">Listado clientes</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'exercise_list' client_pk=client.pk %}">Listado ejercicios {{ client.name }}</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="">Ejercicio {{ exercise.name }}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">Detalles</h1>
+        </div>
+          <div class="card-body mb-4 mt-4">
+            <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
+
+              <div class="px-2 pb-2 pb-md-0 text-center">
+                <div id="circles-2"></div>
+                <h6 class="fw-bold mt-3 mb-0">Correos enviados</h6>
+              </div>
+
+              <div class="px-2 pb-2 pb-md-0 text-center">
+                <div id="circles-1"></div>
+                <h6 class="fw-bold mt-3 mb-0">Abiertos</h6>
+              </div>
+
+              <div class="px-2 pb-2 pb-md-0 text-center">
+                <div id="circles-3"></div>
+                <h6 class="fw-bold mt-3 mb-0">Clikeados</h6>
+              </div>
+
+            </div>
+        </div>
+          
+        <div class="card-body">
+            <h1 class="card-title">Lista de empleados</h1>
+            <div>
+                <a href="{% url 'add_employees' client_pk=exercise.client.pk exercise_pk=exercise.pk %}"><button class="btn btn-success mr-4"><span class="btn-label"><i class="fa fa-plus"></i></span>Cargar empleados</button></a>     
+            
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Enviar correos" name="send_mail" onsubmit="setFormSubmitting()" class="btn btn-primary pull-right mt-4" />
+                </form>
+            </div>
+
+            <table class="table table-hover table-head-bg-info">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Datos</th>
+                        <th scope="col" width="5%">Recibido</th>
+                        <th scope="col" width="5%">Abierto</th>
+                        <th scope="col" width="5%">Click</th>
+                    </tr>
+                </thead>
+
+                <tbody>          
+
+                    {% for employees in employees_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ employees.email }}</td>
+                            <td>{{ employees.data }}</td>
+                            <td align="center">{% if employees.received == True %}<i class="fas fa-check fa-lg" style="color: green;"></i>{% else %}<i class="fas fa-times fa-lg" style="color: red;"></i>{% endif %}</td>
+                            <td align="center">{% if employees.read == True %}<i class="fas fa-check fa-lg" style="color: green;"></i>{% else %}<i class="fas fa-times fa-lg" style="color: red;"></i>{% endif %}</td>
+                            <td align="center">{% if employees.click == True %}<i class="fas fa-check fa-lg" style="color: green;"></i>{% else %}<i class="fas fa-times fa-lg" style="color: red;"></i>{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>    
+    </div>
+</div>
 
 {% endblock content %}
+
+
+{% block javascripts %}
+
+<script>
+		Circles.create({
+			id:'circles-1',
+			radius:90,
+			value:60,
+			maxValue:100,
+			width:20,
+			text: 5,
+			colors:['#f1f1f1', '#FF9E27'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+		Circles.create({
+			id:'circles-2',
+			radius:90,
+			value:70,
+			maxValue:100,
+			width:20,
+			text: 36,
+			colors:['#f1f1f1', '#2BB930'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+		Circles.create({
+			id:'circles-3',
+			radius:90,
+			value:40,
+			maxValue:100,
+			width:20,
+			text: 12,
+			colors:['#f1f1f1', '#F25961'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+</script>
+
+{% endblock javascripts %}

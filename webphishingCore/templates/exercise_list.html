@@ -1,19 +1,58 @@
 {% extends 'layouts/base.html' %}
 
+{% block title %} Listado Ejercicios {{ client.name }} {% endblock title %}
+
 {% block content %}
-
-    <h2>{{ client.name }}</h2>
-    <a href="{% url 'add_exercise' client_pk=client.pk %}"><span>Crear ejercicio</span></a>
-   
+<div class="page-inner">
+    <a href="{% url 'add_exercise' client_pk=client.pk %}"><button class="btn btn-success pull-right"><span class="btn-label"><i class="fa fa-plus"></i></span> Crear ejercicio</button></a> 
+    <div class="page-header">
+        <h4 class="page-title">Listado ejercicios {{ client.name }}</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="{% url 'client_list' %} ">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'client_list' %}">Listado clientes</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="">Listado ejercicios {{ client.name }}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
     {% for exercise in exercise_list %}
+            <div class="col-md-3">
+                <div class="card-pricing2 card-info">
+                    <div class="pricing-header">
+                        <h3 class="fw-bold">{{ exercise.name }}</h3>
+                        <span class="sub-title">{{ exercise.description }}</span>
+                    </div>
+                    <div class="price-value">
+                        <div class="value">
+                            <span class="amount">500</span>
+                            <span class="month">Personas</span>
+                        </div>
+                    </div>
 
-        <div style="background-color: cornflowerblue;">
-            <p>{{ exercise.name }}</p>
-            <p>{{ exercise.description }}</p>
-            <p>{{ exercise.campaigns }}</p>
-            <a href="{% url 'exercise_detail' client_pk=exercise.client.pk exercise_pk=exercise.pk%}"><span>Detalles</span></a>
-        </div>
+                    <ul class="pricing-content">
+                    {% for campaigns in exercise.campaigns.all %}                         
+                        <li><h1>{{ campaigns }}</h1></li>
+                    {% endfor %}
+                    </ul>
 
-    {% endfor %}
+                    <a href="{% url 'exercise_detail' client_pk=exercise.client.pk exercise_pk=exercise.pk%}" class="btn btn-secondary btn-border btn-lg w-75 fw-bold mb-3">Detalles</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock content %}

@@ -1,0 +1,60 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">Cargar empleados</span></h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="{% url 'client_list' %}">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'client_list' %}">Listado clientes</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'exercise_list' client_pk=client.pk %}">Listado ejercicios {{ client.name }}</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'exercise_detail' client_pk=exercise.client.pk exercise_pk=exercise.pk%}">Ejercicio {{ exercise.name }}</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="">Cargar empleados</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-md-8 ml-auto mr-auto mt-5">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Cargar empleados</div>
+            </div>
+            <div class="card-body col-md-10 ml-auto mr-auto">
+                <div class="form-group">
+                    <form action="" method="POST" class="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="inputcsv">Cargar archivo CSV</label>
+                        <input type="file" name="csvfile" class="form-control-file" id="inputcsv">
+                        <button class="btn btn-success text-center pull-right mt-2" type="submit">Cargar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

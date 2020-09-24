@@ -1,18 +1,48 @@
 {% extends 'layouts/base.html' %}
 
+{% block title %} Listado campañas {{ exercise.name }} {% endblock title %}
+
 {% block content %}
 
-    <h2>Lista de campañas</h2>
-    <a href="{% url 'add_campaign' %}"><span>Crear campaña</span></a>
+<div class="page-inner">
+    <a href="{% url 'add_campaign' %}"><button class="btn btn-success pull-right"><span class="btn-label"><i class="fa fa-plus"></i></span> Crear campaña</button></a>
+    <div class="page-header">
+        <h4 class="page-title">Listado campañas</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="{% url 'client_list' %} ">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="">Listado campañas</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row">
    
-    {% for campaign in campaign_list %}
+        {% for campaign in campaign_list %}
 
-        <div style="background-color: cornflowerblue;">
-            <p>{{ campaign.name }}</p>
-            <p>{{ campaign.campaigdescription }}</p>
-            <a href="{% url 'campaign_detail' campaign_pk=campaign.pk %}"><span>Detalles</span></a>
-        </div>
+            <div class="col-md-3">
+                <div class="card card-secondary card-annoucement card-round">
+                    <div class="card-body text-center">
+                        <div class="card-opening">{{ campaign.name }}</div>
+                        <div class="card-desc">{{ campaign.description }}</div>
+                        <div class="card-detail">
+                            <a href="{% url 'campaign_detail' campaign_pk=campaign.pk %}" class="btn btn-light btn-rounded">Detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    {% endfor %}
+        {% endfor %}
+
+    </div>
+
+</div>
 
 {% endblock content %}
