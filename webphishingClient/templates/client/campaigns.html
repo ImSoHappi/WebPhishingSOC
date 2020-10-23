@@ -1,0 +1,139 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Ethical Phishing {% endblock title %}
+
+{% block content %}
+
+<div class="page-inner">
+
+    <div class="page-header">
+        <h4 class="page-title">Campañas</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="{% url 'client_list' %}">
+                    <i class="flaticon-home"></i>
+                </a> 
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="">Campañas Ethical Phishing</a>
+            </li>
+        </ul>
+        
+    </div>
+
+    <!-- campaigns cards -->
+    <div class="row">
+        <div class="col-xl-4 col-lg-12">
+            <div class="card card-post card-round card-profile">
+                <img class="card-img-top" src="https://www.blogbankia.es/recursos/img/blog/20190301/marzo-2019/phishing-mini-783x412.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <a href="#">
+                            Campaña Plebicito - Medidas covid
+                        </a>
+                    </h3>
+                    <p class="card-text">Campaña orientada a que las personas caigan con el enganche del plebicito. Hablando de las medidas que deben tener en cuenta para la votación de este 25 de Octubre.</p>
+                    <a href="#" class="btn btn-primary btn-rounded btn-sm">Ver resultados</a>
+                </div>
+                <div class="card-footer">
+
+                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    <script>
+        /* PieChart */
+        var pieChart = document.getElementById('pieChart_sendMail').getContext('2d');
+        var myPieChart = new Chart(pieChart, {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [7800, 3500, 248],
+					backgroundColor :["#1d7af3","#f3545d","#fdaf4b"],
+					borderWidth: 0
+				}],
+				labels: ['Correos enviados', 'Correos faltantes', 'Correos fallidos'] 
+			},
+			options : {
+				responsive: true, 
+				maintainAspectRatio: false,
+				legend: {
+					position : 'bottom',
+					labels : {
+						fontColor: 'rgb(154, 154, 154)',
+						fontSize: 11,
+						usePointStyle : false,
+						padding: 20
+					}
+				},
+				pieceLabel: {
+					render: 'percentage',
+					fontColor: 'white',
+					fontSize: 14,
+				},
+				tooltips: false,
+				layout: {
+					padding: {
+						left: 20,
+						right: 20,
+						top: 20,
+						bottom: 20
+					}
+				}
+			}
+        })
+        
+        /* Doughtnut */     
+        function createDoughnut(target, chartData, chartLabels, chartColors){
+            var element = document.getElementById(target).getContext('2d');
+            var myDoughnutChart = new Chart(element, {
+			type: 'doughnut',
+			data: {
+				datasets: [{
+					data: chartData,
+					backgroundColor: chartColors
+				}],
+				labels: chartLabels
+			},
+			options: {
+				responsive: true, 
+				maintainAspectRatio: false,
+				legend : {
+					position: 'bottom'
+                },
+                pieceLabel: {
+					render: 'percentage',
+					fontColor: 'white',
+					fontSize: 14,
+				},
+				layout: {
+					padding: {
+						left: 20,
+						right: 20,
+						top: 20,
+						bottom: 20
+					}
+				}
+			}
+		});
+        }
+
+        // Graphs
+        var doughnutChart_openMail = createDoughnut("doughnutChart_openMail", [2000, 4500], [], ['#56d678','#cccccc']);
+        var doughnutChart_clickMail = createDoughnut("doughnutChart_clickMail", [4500, 2000], [], ['#56d678','#cccccc']);
+        var doughnutChart_infoMail = createDoughnut("doughnutChart_infoMail", [5500, 1000], [], ['#56d678','#cccccc']);
+   
+        
+
+    </script>
+{% endblock %}

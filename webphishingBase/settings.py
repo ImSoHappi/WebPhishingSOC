@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'webphishingCore',
     'webphishingApi',
     'webphishingAuth',
+    'webphishingClient',
     'rest_framework',
     'corsheaders',
 ]

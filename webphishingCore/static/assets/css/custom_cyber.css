@@ -51,6 +51,23 @@
     text-align: center;
 }
 
+.flex-overlay {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    z-index: 99;
+    left: 0; top: -2%; right: 0; bottom: 0;
+}
+.flex-middle {
+    align-items: center;
+    justify-content: center;
+    font-size: 2vw;
+}
+.left-border-active { border-left: 10px solid lightgreen !important; }
+.left-border-finished { border-left: 10px solid #4592ff !important; }
+.left-border-pending { border-left: 10px solid #b0b2b5 !important; }
+
 textarea {
     background-color: azure;
     

@@ -1,0 +1,231 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Ethical Phishing {% endblock title %}
+
+{% block content %}
+
+<div class="page-inner">
+
+    <div class="page-header">
+        <h4 class="page-title">Ethical Phishing</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="{% url 'client_list' %}">
+                    <i class="flaticon-home"></i>
+                </a> 
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="">Resultados del ejercicio</a>
+            </li>
+        </ul>
+        
+    </div>
+
+    <!-- Seguimiento Usuarios -->
+    <div class="row">
+        <div class="col-xl-3 col-lg-12"">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Correos enviados</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="pieChart_sendMail" style="width: 50%; height: 50%"></canvas>
+                        <div class="flex-overlay h6"><b>Total:</b> 3870</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-12"">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Correos abiertos</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="doughnutChart_openMail" style="width: 50%; height: 50%"></canvas>
+                        <div class="flex-overlay flex-middle">1450</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Click en enlace</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="doughnutChart_clickMail" style="width: 50%; height: 50%"></canvas>
+                        <div class="flex-overlay flex-middle">3870</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Ingreso de información</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="doughnutChart_infoMail" style="width: 50%; height: 50%"></canvas>
+                        <div class="flex-overlay flex-middle">4210</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seguimiento Usuarios -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Seguimiento de usuarios</div>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table-hover table-head-bg-info" id="table_module">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="3%">Fecha de envío</th>
+                                <th scope="col" width="10%">Correo</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellido</th>
+                                <th scope="col">Campaña utilizada</th>
+                                <th scope="col" width="3%">Correo enviado</th>
+                                <th scope="col" width="3%">Correo abierto</th>
+                                <th scope="col" width="3%">Click en enlace</th>
+                                <th scope="col" width="3%">Ingreso de información</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span class="badge badge-success">01 oct 2020 - 14:30</span>
+                                </td>
+                                <td>handler@example.org</td>
+                                <td>John</td>
+                                <td>Doe</td>
+                                <td>Campaña #1</td>
+                                <td class="text-center"><i class="fas fa-check fa-2x" style="color: green;"></i></td>
+                                <td class="text-center"><i class="fas fa-check fa-2x" style="color: green;"></i></td>
+                                <td class="text-center"><i class="fas fa-check fa-2x" style="color: green;"></i></td>
+                                <td class="text-center"><i class="fas fa-check fa-2x" style="color: green;"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="badge badge-success">#1</span>
+                                </td>
+                                <td>handler@example.org</td>
+                                <td>John</td>
+                                <td>Doe</td>
+                                <td>Campaña #2</td>
+                                <td class="text-center"><i class="fas fa-check fa-2x" style="color: green;"></i></td>
+                                <td class="text-center"><i class="fas fa-minus fa-2x"></i></td>
+                                <td class="text-center"><i class="fas fa-minus fa-2x"></i></td>
+                                <td class="text-center"><i class="fas fa-minus fa-2x"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    <script>
+        /* PieChart */
+        var pieChart = document.getElementById('pieChart_sendMail').getContext('2d');
+        var myPieChart = new Chart(pieChart, {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [7800, 3500, 248],
+					backgroundColor :["#1d7af3","#f3545d","#fdaf4b"],
+					borderWidth: 0
+				}],
+				labels: ['Correos enviados', 'Correos faltantes', 'Correos fallidos'] 
+			},
+			options : {
+				responsive: true, 
+				maintainAspectRatio: false,
+				legend: {
+					position : 'bottom',
+					labels : {
+						fontColor: 'rgb(154, 154, 154)',
+						fontSize: 11,
+						usePointStyle : false,
+						padding: 20
+					}
+				},
+				pieceLabel: {
+					render: 'percentage',
+					fontColor: 'white',
+					fontSize: 14,
+				},
+				tooltips: false,
+				layout: {
+					padding: {
+						left: 20,
+						right: 20,
+						top: 20,
+						bottom: 20
+					}
+				}
+			}
+        })
+        
+        /* Doughtnut */     
+        function createDoughnut(target, chartData, chartLabels, chartColors){
+            var element = document.getElementById(target).getContext('2d');
+            var myDoughnutChart = new Chart(element, {
+			type: 'doughnut',
+			data: {
+				datasets: [{
+					data: chartData,
+					backgroundColor: chartColors
+				}],
+				labels: chartLabels
+			},
+			options: {
+				responsive: true, 
+				maintainAspectRatio: false,
+				legend : {
+					position: 'bottom'
+                },
+                pieceLabel: {
+					render: 'percentage',
+					fontColor: 'white',
+					fontSize: 14,
+				},
+				layout: {
+					padding: {
+						left: 20,
+						right: 20,
+						top: 20,
+						bottom: 20
+					}
+				}
+			}
+		});
+        }
+
+        // Graphs
+        var doughnutChart_openMail = createDoughnut("doughnutChart_openMail", [2000, 4500], [], ['#56d678','#cccccc']);
+        var doughnutChart_clickMail = createDoughnut("doughnutChart_clickMail", [4500, 2000], [], ['#56d678','#cccccc']);
+        var doughnutChart_infoMail = createDoughnut("doughnutChart_infoMail", [5500, 1000], [], ['#56d678','#cccccc']);
+   
+        
+
+    </script>
+{% endblock %}

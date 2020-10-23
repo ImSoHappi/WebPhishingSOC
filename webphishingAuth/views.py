@@ -10,18 +10,18 @@ def authentication(request):
     if request.user.is_authenticated:
         return redirect('client_list')
 
-    username = request.POST.get('username')
-    password = request.POST.get('password')
+    if request.POST:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-    user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)
 
-    if user is not None:
+        if user is not None:
 
-        login(request, user)
-        return redirect('client_list')
-
-    else:
-        messages.error(request, 'Usuario o contraseña invalidos.')
+            login(request, user)
+            return redirect('client_list')
+        else:
+            messages.error(request, 'Usuario o contraseña invalidos.')
 
     return render(request, 'auth/login.html')
 
