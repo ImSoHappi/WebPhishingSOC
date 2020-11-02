@@ -6,6 +6,7 @@
 					
 						<ul class="nav nav-primary">
 							
+							{% if user.extend.isAdmin %}
 							<li class="nav-section mt-4">
 								<span class="sidebar-mini-icon">
 									<i class="fa fa-ellipsis-h"></i>
@@ -14,48 +15,42 @@
 							</li>					
 
 							<li class="nav-item">
-								<a class="nav-link" href="">
+								<a class="nav-link" href="{% url 'management_client_list' %}">
 									<i class="fas fa-user-cog"></i>
 									<p>Administración clientes</p>
 								</a>
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'campaign_list' %}">
+								<a class="nav-link" href="">
 								  <i class="fas fa-edit"></i>
 								  <p>Administración campañas</p>
 								</a>
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'campaign_list' %}">
+								<a class="nav-link" href="">
 								  <i class="fas fa-cogs"></i>
 								  <p>Administración fishing hooks</p>
 								</a>
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'client_list' %}">
-									<i class="fas fa-users"></i>
-									<p>Clientes</p>
-								</a>
-							</li>
-
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'campaign_list' %}">
+								<a class="nav-link" href="">
 									<i class="fas fa-align-left"></i>
 									<p>Campañas</p>
 								</a>
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'fishinghook_list' %}">
+								<a class="nav-link" href="">
 									<i class="fas fa-fish"></i>
 									<p>Fishing Hooks</p>
 								</a>
 							</li>
-
+							
 							<li><hr noshade="noshade" width="90%"></li>	
+							{% endif %}
 
 							<li class="nav-section mt-4">
 								<span class="sidebar-mini-icon">
@@ -65,21 +60,21 @@
 							</li>	
 
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'client_select_exercise' %}">
+								<a class="nav-link" href="">
 									<i class="fas fa-grip-horizontal"></i>
 									<p>Dashboard</p>
 								</a>
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'client_campaigns' %}">
+								<a class="nav-link" href="">
 									<i class="fas fa-graduation-cap"></i>
 									<p>Campañas</p>
 								</a>
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'fishinghook_list' %}">
+								<a class="nav-link" href="">
 									<i class="fas fa-user-cog"></i>
 									<p>Gestión de usuarios</p>
 								</a>
@@ -95,7 +90,7 @@
 							</li>
 
 							<li class="nav-item ">
-							  	<a class="nav-link" href="{% url 'logout' %}" >
+							  	<a class="nav-link" href="{% url 'auth_logout' %}" >
 									<i class="fas fa-sign-out-alt"></i>
 									<p>Cerrar sesión</p>
 							  	</a>

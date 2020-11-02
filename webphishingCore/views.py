@@ -1,16 +1,31 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import clientModel, exerciseModel, csvModel, employeesModel, campaignModel
-import csv, re
-from .forms import clientForm, exerciseForm, csvForm, campaignForm
-from django.contrib import messages
-from django.core.mail.message import EmailMultiAlternatives
-from django.core.mail import get_connection
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.http import HttpResponseServerError
 
 # Create your views here.
+@login_required
+def user_redirector(request):
+    # Check user permissions
+    try:
+        user = request.user
+        xUser = user.extend
+
+        if user.is_staff or xUser.isAdmin():
+            return redirect('management_home')
+        elif xUser.isClient():
+            return redirect('client_home')
+        elif xUser.isColaborator():
+            return redirect('colaborator_home')
+        else:
+            return HttpResponseServerError()
+    except Exception as e:
+        print(e)
+        return HttpResponseServerError()
 
 
+'''
 ################################################################
 ######################### CLIENT VIEWS #########################
 ################################################################
@@ -171,4 +186,4 @@ def campaign_detail(request, campaign_pk):
     context['campaign'] = campaignModel.objects.get(pk=campaign_pk)
 
     return render(request, 'campaign_detail.html', context=context)
-
+'''

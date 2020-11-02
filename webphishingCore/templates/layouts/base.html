@@ -53,6 +53,16 @@
 		<div class="main-panel">
 
 			<div class="content">
+				
+				<div>
+					{% if messages %}
+					<ul class="messages">
+						{% for message in messages %}
+						<li class="{{ message.tags }}">{{ message }}</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</div>
 
 				{% block content %}{% endblock content %}
 			
@@ -68,6 +78,6 @@
 
 	<!-- Specific JS goes HERE -->
     {% block javascripts %}{% endblock javascripts %}
-	
+
 </body>
 </html>

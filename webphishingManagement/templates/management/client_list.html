@@ -1,18 +1,18 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %} Listado clientes {% endblock title %}
+{% block title %} Administración clientes {% endblock title %}
 
 {% block content %}
 
 <div class="page-inner">
     
-    <a href="{% url 'add_client' %}"><button class="btn btn-success pull-right"><span class="btn-label"><i class="fa fa-plus"></i></span>Crear cliente</button></a> 
+    <a href="{% url 'management_add_client' %}"><button class="btn btn-success pull-right"><span class="btn-label"><i class="fa fa-plus"></i></span>Crear cliente</button></a> 
 
     <div class="page-header">
-        <h4 class="page-title">Listado clientes</h4>
+        <h4 class="page-title">Administración clientes</h4>
         <ul class="breadcrumbs">
             <li class="nav-home">
-                <a href="{% url 'client_list' %}">
+                <a href="{% url 'management_home' %}">
                     <i class="flaticon-home"></i>
                 </a> 
             </li>
@@ -20,7 +20,7 @@
                 <i class="flaticon-right-arrow"></i>
             </li>
             <li class="nav-item">
-                <a href="">Listado clientes</a>
+                <a href=""><b>Administración clientes</b></a>
             </li>
         </ul>
         
@@ -28,23 +28,23 @@
 
     <div class="row">
         {% for client in client_list %}
-            {% if client.disabled == False %}
+            {% if not client.disabled %}
                 <div class="col-md-4">
                     <div class="card card-profile">
-                        <div class="card-header" style="background: linear-gradient(-45deg, #0A5A97, #48ABF7);">
+                        <div class="card-header" style="background: {{ client.main_color }};">
                             <div class="profile-picture">
                                 <div class="avatar avatar-xl">
-                                    <img src="/static/assets/img/download.png" alt="..." class="avatar-img rounded-circle">
+                                    <img src="{{ client.logo.url }}" alt="{{ client.logo }}" class="avatar-img rounded-circle">
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="user-profile text-center">
-                                <div class="name"><a href="{% url 'exercise_list' client_pk=client.pk %}"><h4>{{ client.name }}</h4></a></div>
+                                <div class="name"><a href="{% url 'management_client_view' client_pk=client.uuid %}"><h4>{{ client.name }}</h4></a></div>
                                 <div class="job">{{ client.email }}</div>
                                 <div class="desc">{{ client.description }}</div>
                                 <div class="view-profile">
-                                    <a href="{% url 'exercise_list' client_pk=client.pk %}" class="btn btn-info btn-block">Ver ejercicios</a>
+                                    
                                 </div>
                             </div>                        
                         </div>
@@ -52,17 +52,12 @@
                             <div class="row user-stats text-center">
                                 <div class="col">
                                     <div class="number">
-                                        {% for exercise in exercises_list %}
-                                            
-                                            holaaaa
-                                            
-                                        {% endfor %}
                                     </div>
                                     <div class="title">Ejercicios</div>
                                 </div>
                                 <div class="col">
                                     <div class="number">25</div>
-                                    <div class="title">Usuarios</div>
+                                    <div class="title">Colaboradores</div>
                                 </div>
                             </div>
                         </div>                      

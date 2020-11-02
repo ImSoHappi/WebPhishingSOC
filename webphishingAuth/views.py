@@ -4,11 +4,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
-def authentication(request):
-
+def login_view(request):
     if request.user.is_authenticated:
-        return redirect('client_list')
+        return redirect('redirector')
 
     if request.POST:
         username = request.POST.get('username')
@@ -17,9 +15,8 @@ def authentication(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-
             login(request, user)
-            return redirect('client_list')
+            return redirect('redirector')
         else:
             messages.error(request, 'Usuario o contraseña invalidos.')
 
@@ -28,4 +25,4 @@ def authentication(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('authentication')
+    return redirect('auth_login')
