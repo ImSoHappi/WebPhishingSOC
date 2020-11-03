@@ -1,5 +1,7 @@
 from django.db import models
-import uuid
+from django_celery_results.models import TaskResult
+
+import uuid, random
 
 class Colaborator(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -16,17 +18,29 @@ class Colaborator(models.Model):
     email = models.EmailField()
 
     # Optional
-    empresa = models.CharField(max_length=120, blank=True)
-    rut = models.CharField(max_length=10, blank=True)
-    cargo = models.CharField(max_length=100, blank=True)
-    org1 = models.CharField(max_length=100, blank=True)
-    org2 = models.CharField(max_length=100, blank=True)
-    org3 = models.CharField(max_length=100, blank=True)
-    region = models.CharField(max_length=100, blank=True)
-    ubicacion = models.CharField(max_length=100, blank=True)
+    extra_data = models.TextField(default='', blank=True)
+
+    @staticmethod
+    def Exists(email, client):
+        return Colaborator.objects.filter(email = email, client = client).exists()
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+def upload_to_uuid_folder(instance, filename):
+    prefix = random.randrange(100000000000,999999999999)
+    return "clients/{}/{}_{}".format(instance.client.uuid, prefix, filename)
+class ClientFiles(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    disabled = models.BooleanField(default = False)
+
+    # FK
+    client = models.ForeignKey('webphishingAuth.ClientModel', on_delete=models.CASCADE)
+
+    # Data
+    file_data = models.FileField(upload_to=upload_to_uuid_folder)
+
 
 '''
 class exerciseModel(models.Model):

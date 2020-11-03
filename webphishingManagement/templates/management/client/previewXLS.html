@@ -1,0 +1,112 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Previsualizacion archivo{% endblock title %}
+
+{% block content %}
+
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">Administración clientes</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="{% url 'management_home' %}">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'management_client_list' %}">Administración clientes</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'management_client_view' client_pk=client.pk %}">{{ client.name }}</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href=""><b><i class="fas fa-file-excel"></i> &nbsp;Agregar masivamente </b></a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-lg-6 col-xl-3">
+                <div class="card card-stats card-round">
+                    <div class="card-body">
+                        <h4 class="card-title text-success">Registros</h4>
+                        <h1>{{ row_count }}</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-xl-3">
+                <div class="card card-stats card-round">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary">Campos</h4>
+                        <h1>{{ column_count }}</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-xl-6">
+                <div class="card card-stats card-round">
+                    <div class="card-body">
+                        <h4 class="card-title text-muted">Analitica de Datos</h4>
+                        {% for field in field_analytics %}
+                            <span class="badge badge-success m-1 p-2">
+                                {{ field }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 ml-auto mr-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Previsualizacion archivo</div>
+                        <a href="{% url 'management_client_xls_delete' client_pk=client.pk file_id=file.pk %}"><button class="btn btn-danger pull-right"><span class="btn-label"><i class="icon-close"></i></span> Eliminar archivo</button></a>
+                        <a href="{% url 'management_client_xls_process' client_pk=client.pk file_id=file.pk %}"><button class="btn btn-success pull-right mr-2"><span class="btn-label"><i class="icon-cursor"></i></span> Procesar archivo</button></a> 
+                    </div>
+                    <div class="card-body table-responsive col-12">
+                        <table class="table table-hover table-head-bg-info" id="table_module">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    {% for column in file_headers %}
+                                    <th scope="col">{{ column }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in data.itertuples %}
+                                <tr>
+                                    {% for value in row %}
+                                    <td>{{ value }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td>...</td>
+                                    {% for column in file_headers %}
+                                    <td>...</td>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+            </div>
+        </div>
+          
+    </div>
+
+{% endblock content %}

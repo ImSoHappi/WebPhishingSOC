@@ -64,8 +64,12 @@
             <div class="col-lg-12 col-xl-6">
                 <div class="card card-stats card-round">
                     <div class="card-body">
-                        <h4 class="card-title text-danger">TODO</h4>
-                        <h1>-</h1>
+                        <h4 class="card-title text-danger">Última tarea</h4>
+                        <p>
+
+                            <span class="badge {% if client.getLastTask.status == 'SUCCESS' %}badge-success{% elif client.getLastTask.status == 'FAILED' %}badge-danger{% elif client.getLastTask.status == 'STARTED' %}badge-primary{% else %}badge-warning{% endif %}">{{ client.getLastTask.status }}</span>
+                            - {{ client.getLastTask.result }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -78,8 +82,14 @@
                     <div class="card-header">
                         <div class="card-title">
                             Listado de usuarios ({{client.getColaborators|length}})
-                            <a href="{% url 'management_add_client' %}"><button class="btn btn-success pull-right"><span class="btn-label"><i class="fas fa-user-plus"></i></span> Agregar usuario</button></a>
-                            <a href="{% url 'management_client_addXLS' client_pk=client.pk %}"><button class="btn btn-dark pull-right"><span class="btn-label"><i class="fas fa-file-excel"></i></span> Agregar masivamente</button></a> 
+                            <!--<div class="form-group">
+                                <form action="" method="POST">
+                                    {% csrf_token %}
+                                    <input type="text" class="form-control" name="q">
+                                </form>
+                            </div>-->
+                            <a href="{% url 'management_client_colaborator_add' client_pk=client.pk %}"><button class="btn btn-success pull-right"><span class="btn-label"><i class="fas fa-user-plus"></i></span> Agregar usuario</button></a>
+                            <a href="{% url 'management_client_addXLS' client_pk=client.pk %}"><button class="btn btn-dark pull-right mr-2"><span class="btn-label"><i class="fas fa-file-excel"></i></span> Agregar masivamente</button></a> 
                         </div>
                     </div>
                     <div class="card-body">
@@ -88,7 +98,7 @@
                             <div class="col-xl-3 col-lg-6 col-md-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <b>{{ colaborator.first_name}} {{ colaborator.last_name}}</b><br/>
+                                        <b><a href="{% url 'management_client_colaborator_edit' client_pk=client.pk colaborator_pk=colaborator.pk %}">{{ colaborator.first_name}} {{ colaborator.last_name}}</b></a><br/>
                                         <span class="text-muted">&lt;{{ colaborator.email }}&gt;</span>
                                     </div>
                                 </div>

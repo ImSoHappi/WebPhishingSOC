@@ -7,7 +7,12 @@ urlpatterns = [
     path('client/add_client/', views.add_client, name='management_add_client'),
 
     path('<str:client_pk>/addXLS', views.client_addXLS, name='management_client_addXLS'),
+    path('<str:client_pk>/addXLS/<int:file_id>/preview', views.client_xls_preview, name='management_client_xls_preview'),
+    path('<str:client_pk>/addXLS/<int:file_id>/delete', views.client_xls_delete, name='management_client_xls_delete'),
+    path('<str:client_pk>/addXLS/<int:file_id>/process', views.client_xls_process, name='management_client_xls_process'),
     path('<str:client_pk>/view', views.client_view, name='management_client_view'),
+    path('<str:client_pk>/colaborator/add', views.client_colaborator_crud, name='management_client_colaborator_add'),
+    path('<str:client_pk>/colaborator/<str:colaborator_pk>', views.client_colaborator_crud, name='management_client_colaborator_edit'),
     path('<str:client_pk>/', views.client_view, name='management_client_view'),
     #path('campaign_list/', webviews.campaign_list, name='campaign_list'),
     #path('campaign_list/add_campaign/', webviews.add_campaign, name='add_campaign'),

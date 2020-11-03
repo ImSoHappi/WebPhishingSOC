@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'colorfield',
     'rest_framework',
     'corsheaders',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -98,6 +99,14 @@ DATABASES = {
     }
 }
 
+# Celery Configuration Options
+CELERY_TIMEZONE = "America/Santiago"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_URL = 'amqp://rbmqServ:5672'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

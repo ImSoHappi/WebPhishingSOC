@@ -1,7 +1,6 @@
 {% extends 'layouts/base.html' %}
-{% load static %}
 
-{% block title %}Crear cliente{% endblock title %}
+{% block title %}Editar o crear colaborador{% endblock title %}
 
 {% block content %}
 
@@ -30,25 +29,23 @@
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href=""><b><i class="fas fa-file-excel"></i> &nbsp;Agregar masivamente </b></a>
+                    <a href=""><b><i class="fas fa-file-excel"></i> &nbsp;Editar o crear colaborador </b></a>
                 </li>
             </ul>
         </div>
+
         <div class="col-md-8 ml-auto mr-auto mt-5">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Agregar masivamente</div>
+                    <div class="card-title">Agregar o Actualizar colaborador</div>
                 </div>
             <div class="card-body col-md-10 ml-auto mr-auto">
                 <div class="form-group">
                     <form method="POST" enctype="multipart/form-data">
-                        <h3>
-                            <p>Aca se puede cargar el archivo maestro con los usuarios de <b>{{ client.name }}</b>. Este archivo debe estar basado en la siguiente planilla de cálculo.</p>
-                            <p><center><a href="{% static 'files/xls_template.xlsx' %}">[Descarga plantilla]</a></p></center></h3>
-                        <hr/>
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <button class="btn btn-success text-center pull-right mt-2" type="submit">Cargar datos</button>
+                        <button class="btn btn-danger text-center mt-2" type="submit" name="delete_colaborator">Eliminar</button>
+                        <button class="btn btn-success text-center pull-right mt-2" type="submit">Guardar</button>
                     </form>
                 </div>
             </div>

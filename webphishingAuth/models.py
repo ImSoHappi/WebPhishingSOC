@@ -74,11 +74,32 @@ class ClientModel(models.Model):
     relevant_fields = models.TextField()
     logo = models.ImageField(upload_to=upload_to_uuid_folder, null = True, blank = True)
 
+    last_task = models.CharField(max_length=255, default='')
+
+    def getLastTask(self):
+        results = TaskResult.objects.filter(task_id = self.last_task)
+        if len(results) > 0:
+            return results[0]
+        else:
+            return "Sin tareas"
+
     def getUsers(self):
         return UserModel.objects.filter(client = self)
 
     def getColaborators(self):
         return Colaborator.objects.filter(client = self)
+
+    def getColaboratorById(self, id):
+        try:
+            return Colaborator.objects.get(client = self, pk = id)
+        except:
+            return None
+
+    def getFileById(self, id):
+        try:
+            return ClientFiles.objects.get(client = self.pk, pk = id)
+        except:
+            return None
 
     @staticmethod
     def getClient(pk):
