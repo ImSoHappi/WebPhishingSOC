@@ -78,50 +78,135 @@
         <!-- Tabla usuarios -->
         <div class="row">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            Listado de usuarios ({{client.getColaborators|length}})
-                            <!--<div class="form-group">
-                                <form action="" method="POST">
-                                    {% csrf_token %}
-                                    <input type="text" class="form-control" name="q">
-                                </form>
-                            </div>-->
-                            <a href="{% url 'management_client_colaborator_add' client_pk=client.pk %}"><button class="btn btn-success pull-right"><span class="btn-label"><i class="fas fa-user-plus"></i></span> Agregar usuario</button></a>
-                            <a href="{% url 'management_client_addXLS' client_pk=client.pk %}"><button class="btn btn-dark pull-right mr-2"><span class="btn-label"><i class="fas fa-file-excel"></i></span> Agregar masivamente</button></a> 
+                <div id="accordion">
+
+                    <!-- Usuarios -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <a href="" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
+                                    [+] Listado de usuarios ({{client.getColaborators|length}})
+                                </a>
+                                
+                                <!--<div class="form-group">
+                                    <form action="" method="POST">
+                                        {% csrf_token %}
+                                        <input type="text" class="form-control" name="q">
+                                    </form>
+                                </div>-->
+                                <a href="{% url 'management_client_xls_export' client_pk=client.pk %}"><button class="btn btn-primary pull-right"><span class="btn-label"><i class="fas fa-cloud-download-alt"></i></span></button></a>
+                                <a href="{% url 'management_client_colaborator_add' client_pk=client.pk %}"><button class="btn btn-success pull-right mr-2"><span class="btn-label"><i class="fas fa-user-plus"></i></span> Agregar usuario</button></a>
+                                <a href="{% url 'management_client_addXLS' client_pk=client.pk %}"><button class="btn btn-dark pull-right mr-2"><span class="btn-label"><i class="fas fa-file-excel"></i></span> Agregar masivamente</button></a> 
+
+                                
+                                
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            {% for colaborator in colaborator_pagination %}
-                            <div class="col-xl-3 col-lg-6 col-md-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <b><a href="{% url 'management_client_colaborator_edit' client_pk=client.pk colaborator_pk=colaborator.pk %}">{{ colaborator.first_name}} {{ colaborator.last_name}}</b></a><br/>
-                                        <span class="text-muted">&lt;{{ colaborator.email }}&gt;</span>
+                        <div id="collapseUsers" class="collapse" aria-labelledby="collapseUsers" data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="row">
+                                    {% for colaborator in colaborator_pagination %}
+                                    <div class="col-xl-3 col-lg-6 col-md-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <b><a href="{% url 'management_client_colaborator_edit' client_pk=client.pk colaborator_pk=colaborator.pk %}">{{ colaborator.first_name}} {{ colaborator.last_name}}</b></a><br/>
+                                                <span class="text-muted">&lt;{{ colaborator.email }}&gt;</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+
+                                    <div class="col-12">
+                                        <div class="pagination">
+                                            <span class="step-links">
+                                                {% if colaborator_pagination.has_previous %}
+                                                    <a href="?page=1">[1]</a>
+                                                    <a href="?page={{ colaborator_pagination.previous_page_number }}">[<]</a>
+                                                {% endif %}
+                                        
+                                                <span class="current">
+                                                    Page {{ colaborator_pagination.number }} of {{ colaborator_pagination.paginator.num_pages }}.
+                                                </span>
+                                        
+                                                {% if colaborator_pagination.has_next %}
+                                                    <a href="?page={{ colaborator_pagination.next_page_number }}">[>]</a>
+                                                    <a href="?page={{ colaborator_pagination.paginator.num_pages }}">[{{ colaborator_pagination.paginator.num_pages }}]</a>
+                                                {% endif %}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            {% endfor %}
+                        </div>
+                    </div>
 
-                            <div class="col-12">
-                                <div class="pagination">
-                                    <span class="step-links">
-                                        {% if colaborator_pagination.has_previous %}
-                                            <a href="?page=1">[1]</a>
-                                            <a href="?page={{ colaborator_pagination.previous_page_number }}">[<]</a>
-                                        {% endif %}
-                                
-                                        <span class="current">
-                                            Page {{ colaborator_pagination.number }} of {{ colaborator_pagination.paginator.num_pages }}.
-                                        </span>
-                                
-                                        {% if colaborator_pagination.has_next %}
-                                            <a href="?page={{ colaborator_pagination.next_page_number }}">[>]</a>
-                                            <a href="?page={{ colaborator_pagination.paginator.num_pages }}">[{{ colaborator_pagination.paginator.num_pages }}]</a>
-                                        {% endif %}
-                                    </span>
+                    <!-- Ejercicios -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <a href="" data-toggle="collapse" data-target="#collapseEx" aria-expanded="true" aria-controls="collapseEx">
+                                    [+] Ejercicios ({{client.getExercises|length}})
+                                </a>
+
+                                <a href="{% url 'management_client_exercise_add' client_pk=client.pk %}"><button class="btn btn-success pull-right"><span class="btn-label"><i class="fas fa-crosshairs"></i></span> Agregar ejercicio</button></a>
+   
+                            </div>
+                        </div>
+                        <div id="collapseEx" class="collapse show" aria-labelledby="collapseEx" data-parent="#accordion">
+                            <div class="card-body">
+
+                                <div class="row">
+                                    {% for ejercicio in client.getExercises %}
+                                    <div class="col-xl-6 col-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="card-title">
+                                                    <a href="{% url 'management_client_exercise_edit' client_pk=client.pk exercise_pk=ejercicio.pk %}">{{ ejercicio.uuid }}</a>
+
+
+                                                    <a href="{% url 'management_client_campaign_add' client_pk=client.pk exercise_pk=ejercicio.pk %}"><button class="btn btn-success pull-right mr-2"><span class="btn-label"><i class="far fa-plus-square"></i></span></button></a> 
+                                                </div>
+                                                <span class="badge badge-primary">{{ ejercicio.get_status_display }}</span>
+                                                {{ ejercicio.planification_date }}
+                                            </div>
+                                            <div class="card-body table-responsive col-12">
+        
+                                                <table class="table table-hover table-head-bg-info" id="table_module">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" width="50%">Campaña</th>
+                                                            <th scope="col" width="10%"><span class="fas fa-child" data-toggle="tooltip" data-placement="top" title="Inscritos"></span></th>
+                                                            <th scope="col" width="10%"><span class="fab fa-telegram-plane" data-toggle="tooltip" data-placement="top" title="Enviados"></span></th>
+                                                            <th scope="col" width="10%"><span class="fas fa-envelope-open" data-toggle="tooltip" data-placement="top" title="Abiertos"></span></th>
+                                                            <th scope="col" width="10%"><span class="fas fa-hand-pointer" data-toggle="tooltip" data-placement="top" title="Clickeados"></span></th>
+                                                            <th scope="col" width="10%"><span class="fas fa-crosshairs" data-toggle="tooltip" data-placement="top" title="Comprometidos"></span></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% if ejercicio.getCampanas.count > 0 %}
+                                                        {% for campana in ejercicio.getCampanas %}
+                                                        <tr style="text-align: center;">
+                                                            <td style="text-align: left !important;">
+                                                                <a href="{% url 'management_client_campaign_edit' client_pk=client.pk exercise_pk=ejercicio.pk campaign_pk=campana.pk %}">{{ campana }}</a></td>
+                                                            <td>{{ campana.getSigned|length }}</td>
+                                                            <td>{{ campana.getSent|length }}</td>
+                                                            <td>{{ campana.getOpened|length }}</td>
+                                                            <td>{{ campana.getClicked|length }}</td>
+                                                            <td>{{ campana.getCompromised|length }}</td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                        {% else %}
+                                                        <tr>
+                                                            <td colspan="6" style="text-align: center;">-- <i>Sin campañas</i> --</td>
+                                                        </tr>
+                                                        {% endif %}
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -132,3 +217,9 @@
     </div>
 
 {% endblock content %}
+
+{% block javascript %}
+<script>
+    $(function () {$('[data-toggle="tooltip"]').tooltip()})
+</script>
+{% endblock %}

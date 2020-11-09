@@ -2,14 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.http import HttpResponse
 
 from webphishingAuth.models import *
 from webphishingClient.models import ClientFiles
 
-from io import StringIO
+from io import StringIO, BytesIO
 
 import pandas as pd
 import numpy as np
+import csv 
+
 from .forms import *
 from .tasks import CreateUsersFromXLS
 
@@ -57,6 +60,9 @@ def client_view(request, client_pk):
     pages = Paginator(client.getColaborators(), 20)
     page_number = request.GET.get('page')
     page_obj = pages.get_page(page_number)
+
+    # Ejercicios
+    #exercises = client.getExercises()
 
     context['client'] = client
     context['colaborator_pagination'] = page_obj
@@ -166,6 +172,110 @@ def client_xls_process(request, client_pk, file_id):
     messages.success(request, "El archivo fue enviado a procesamiento.")
 
     return redirect('management_client_list')
+
+@login_required
+def client_xls_export(request, client_pk):
+    context = {}
+
+    client = ClientModel.getClient(client_pk)
+    if client is None:
+        messages.error(request, "El cliente seleccionado no existe.")
+        return redirect('management_client_list')
+
+    # Creating data
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="list.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['guid', 'email'])
+
+    for colaborator in client.getColaborators():
+        writer.writerow([colaborator.pk, colaborator.email])
+
+    return response
+
+@login_required
+def client_exercise_crud(request, client_pk, exercise_pk = None):
+    context = {}
+
+    client = ClientModel.getClient(client_pk)
+    if client is None:
+        messages.error(request, "El cliente seleccionado no existe.")
+        return redirect('management_client_list')
+
+    if exercise_pk is not None:
+        exercise = client.getExerciseById(exercise_pk)
+        if exercise is None:
+            messages.error(request, "El ejercicio no exite dentro de este cliente")
+            return redirect('management_client_view', client_pk = client.pk)
+    else:
+        exercise = None
+    
+    form = AddModifyExercise(instance = exercise)
+    if request.method == "POST":
+        if "delete_exercise" in request.POST and exercise_pk is not None:
+            exercise.delete()
+            messages.success(request, "El ejercicio ha sido eliminado")
+            return redirect('management_client_view', client_pk = client.pk) 
+
+        form = AddModifyExercise(request.POST, instance = exercise)
+        if form.is_valid():
+            dataobject = form.save(commit=False)
+            dataobject.client = client
+            dataobject.save()
+
+            messages.success(request, "Ejercicio editado o agregado correctamente")
+            return redirect('management_client_view', client_pk = client.pk)
+    
+    context['form'] = form
+    context['client'] = client
+    return render(request, 'management/exercise/crud.html', context)
+
+@login_required
+def client_campaign_crud(request, client_pk, exercise_pk, campaign_pk = None):
+    context = {}
+
+    client = ClientModel.getClient(client_pk)
+    if client is None:
+        messages.error(request, "El cliente seleccionado no existe.")
+        return redirect('management_client_list')
+
+    exercise = client.getExerciseById(exercise_pk)
+    if exercise is None:
+        messages.error(request, "El ejercicio seleccionado no existe.")
+        return redirect('management_client_view', client_pk = client.pk)
+
+    if campaign_pk is not None:
+        campaign = exercise.getCampaingById(campaign_pk)
+        if campaign is None:
+            messages.error(request, "La campaña no exite dentro de este ejercicio")
+            return redirect('management_client_view', client_pk = client.pk)
+    else:
+        campaign = None
+
+    form = AddModifyCampaign(instance = campaign)
+    if request.method == "POST":
+        if "delete_campaign" in request.POST and campaign_pk is not None:
+            campaign.delete()
+            messages.success(request, "La campaña ha sido eliminada")
+            return redirect('management_client_view', client_pk = client.pk) 
+
+        form = AddModifyCampaign(request.POST, request.FILES, instance = campaign)
+        if form.is_valid():
+            dataobject = form.save(commit=False)
+            dataobject.client = client
+            dataobject.exercise = exercise
+            dataobject.save()
+
+            messages.success(request, "Campaña editada o agregada correctamente")
+            return redirect('management_client_view', client_pk = client.pk)
+    
+    # Load colaborators in this campaign
+
+    context['form'] = form
+    context['client'] = client
+    context['campaign'] = campaign
+    return render(request, 'management/exercise/campaign_crud.html', context)
 
 @login_required
 def client_colaborator_crud(request, client_pk, colaborator_pk = None):

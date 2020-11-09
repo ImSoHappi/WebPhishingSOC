@@ -1,7 +1,7 @@
 from django import forms
 from webphishingCore.validators import FileValidator
 from webphishingAuth.models import ClientModel
-from webphishingClient.models import Colaborator
+from webphishingClient.models import Colaborator, Exercise, Campaign
 
 import pandas as pd
 import numpy as np
@@ -46,6 +46,34 @@ class AddModifyColaborator(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.TextInput(attrs={'class': 'form-control'}),
             'extra_data': forms.Textarea(attrs={'class': 'form-control'})
+        }
+
+class AddModifyExercise(forms.ModelForm):
+    class Meta:
+        model = Exercise
+        fields = ('planification_date', 'status')
+        labels = {
+            'planification_date': 'Fecha planificada',
+            'status': 'Estado del ejercicio'
+        }
+        widgets = {
+            'planification_date': forms.DateTimeInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'})
+        }
+
+class AddModifyCampaign(forms.ModelForm):
+    class Meta:
+        model = Campaign
+        fields = ('name', 'image_tracking','html_text')
+        labels = {
+            'name': 'Nombre campaña',
+            'image_tracking': 'Imagen a utilizar',
+            'html_text': 'Texto a enviar via mail'
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'image_tracking': forms.FileInput(attrs={'class': 'form-control'}),
+            'html_text': forms.Textarea(attrs={'class': 'form-control'})
         }
 
 validate_xlsx = FileValidator(max_size=1024 * 1024 * 100, content_types=('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/octet-stream'))

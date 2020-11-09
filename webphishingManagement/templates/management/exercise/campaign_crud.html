@@ -1,0 +1,125 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Editar o crear colaborador{% endblock title %}
+
+{% block content %}
+
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">Administración clientes</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="{% url 'management_home' %}">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'management_client_list' %}">Administración clientes</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'management_client_view' client_pk=client.pk %}">{{ client.name }}</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href=""><b><i class="fas fa-file-excel"></i> &nbsp;Editar o crear una campaña </b></a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-8 ml-auto mr-auto mt-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Datos de la campaña</div>
+                </div>
+            <div class="card-body col-md-10 ml-auto mr-auto">
+                <div class="form-group">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-danger text-center mt-2" type="submit" name="delete_colaborator">Eliminar</button>
+                        <button class="btn btn-success text-center pull-right mt-2" type="submit">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 ml-auto mr-auto mt-5">
+            <h1>Inscritos</h1>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Agregar o Actualizar colaborador</div>
+                </div>
+            <div class="card-body table-responsive col-12 ml-auto mr-auto">
+                <table class="table table-hover table-head-bg-info" id="table_module">
+                    <thead>
+                        <tr style="text-align: center;">
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">EMail</th>
+                            
+                            <th scope="col" width="10%"><span class="fab fa-telegram-plane"></span></th>
+                            <th scope="col" width="10%"><span class="fas fa-envelope-open"></span></th>
+                            <th scope="col" width="10%"><span class="fas fa-hand-pointer"></span></th>
+                            <th scope="col" width="10%"><span class="fas fa-crosshairs"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if campaign.getCampaignResults|length > 0 %}
+                            {% for results in campaign.getCampaignResults %}
+                            <tr style="text-align: center;">
+                                <td>{{ results.colaborator.first_name }}</td>
+                                <td>{{ results.colaborator.last_name }}</td>
+                                <td>{{ results.colaborator.email }}</td>
+
+                                <td>
+                                    {% if results.sent %}
+                                    <span data-toggle="tooltip" data-placement="top" title="{{results.sent}}" class="icon-check text-success"></span>
+                                    {% else %}-{% endif %}
+                                </td>
+                                <td>
+                                    {% if results.opened %}
+                                    <span data-toggle="tooltip" data-placement="top" title="{{results.opened}}" class="icon-check text-success"></span>
+                                    {% else %}-{% endif %}
+                                </td>
+                                <td>
+                                    {% if results.clicked %}
+                                    <span data-toggle="tooltip" data-placement="top" title="{{results.clicked}}" class="icon-check text-success"></span>
+                                    {% else %}-{% endif %}
+                                </td>
+                                <td>
+                                    {% if results.compromised %}
+                                    <span data-toggle="tooltip" data-placement="top" title="{{results.compromised}}" class="icon-check text-success"></span>
+                                    {% else %}-{% endif %}
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan=5 style="text-align: center;">-- Sin colaboradores inscritos --</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script>
+    $(function () {$('[data-toggle="tooltip"]').tooltip()})
+</script>
+{% endblock %}

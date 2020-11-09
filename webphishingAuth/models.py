@@ -74,7 +74,7 @@ class ClientModel(models.Model):
     relevant_fields = models.TextField()
     logo = models.ImageField(upload_to=upload_to_uuid_folder, null = True, blank = True)
 
-    last_task = models.CharField(max_length=255, default='')
+    last_task = models.CharField(max_length=255, default='', null = True, blank = True)
 
     def getLastTask(self):
         results = TaskResult.objects.filter(task_id = self.last_task)
@@ -88,6 +88,15 @@ class ClientModel(models.Model):
 
     def getColaborators(self):
         return Colaborator.objects.filter(client = self)
+
+    def getExercises(self):
+        return Exercise.objects.all().order_by('-planification_date')
+
+    def getExerciseById(self, id):
+        try:
+            return Exercise.objects.get(client = self, pk = id)
+        except:
+            return None
 
     def getColaboratorById(self, id):
         try:
