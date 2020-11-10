@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from webphishingClient.models import *
 
-import uuid, random
+import uuid, random, json
 
 #################
 ## Uusuario de plataforma
@@ -88,6 +88,21 @@ class ClientModel(models.Model):
 
     def getColaborators(self):
         return Colaborator.objects.filter(client = self)
+
+    def getFilteredColaborators(self, jsonFilter):
+        if jsonFilter is not None:
+            return Colaborator.objects.filter(extra_data__contains = jsonFilter)
+        else:
+            return self.getColaborators()
+
+    def getColaboratorFilters(self):
+        colaborator = Colaborator.objects.all().first()
+        jsonData = json.loads(colaborator.extra_data.replace("'","\""))
+
+        fields = []
+        for key, value in jsonData.items():
+            fields.append(key)
+        return fields
 
     def getExercises(self):
         return Exercise.objects.all().order_by('-planification_date')

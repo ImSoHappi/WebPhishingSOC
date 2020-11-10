@@ -64,14 +64,16 @@ class AddModifyExercise(forms.ModelForm):
 class AddModifyCampaign(forms.ModelForm):
     class Meta:
         model = Campaign
-        fields = ('name', 'image_tracking','html_text')
+        fields = ('name', 'image_tracking','subject_text', 'html_text')
         labels = {
             'name': 'Nombre campaña',
             'image_tracking': 'Imagen a utilizar',
-            'html_text': 'Texto a enviar via mail'
+            'html_text': 'Texto a enviar via mail',
+            'subject_text': 'Subject para el correo'
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'subject_text': forms.TextInput(attrs={'class': 'form-control'}),
             'image_tracking': forms.FileInput(attrs={'class': 'form-control'}),
             'html_text': forms.Textarea(attrs={'class': 'form-control'})
         }
@@ -101,3 +103,7 @@ class AddXLSToClientForm(forms.Form):
     class Meta:
         fields = ('xls')
         labels = { 'xls': 'Archivo maestro de usuarios' }
+
+class DistributeClientUsersForm(forms.Form):
+    campaign = forms.ModelChoiceField(queryset=Colaborator.objects.none(), widget=forms.Select(attrs={'class': 'form-control'}))
+    query = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required = False)

@@ -1,0 +1,75 @@
+
+{% extends 'layouts/base.html' %}
+
+{% block title %}Editar o crear colaborador{% endblock title %}
+
+{% block content %}
+
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">Administración clientes</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="{% url 'management_home' %}">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'management_client_list' %}">Administración clientes</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'management_client_view' client_pk=client.pk %}">{{ client.name }}</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href=""><b><i class="fas fa-file-excel"></i> &nbsp;Distribuir usuarios </b></a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-8 ml-auto mr-auto mt-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Distribuir usuarios en campañas</div>
+                </div>
+            <div class="card-body col-md-10 ml-auto mr-auto">
+                <div class="form-group">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <p>
+                            <label>Campaña</label>
+                            {{ form.campaign }}</p>
+                        <p>
+                            <label>Filtro</label>
+                            <p>Filtros: {% for field in availableFields %}<span class="badge badge-success">{{ field }}</span>{% endfor %}</p>
+                            <div class="row">
+                                <div class="col-10">{{ form.query }}</div>
+                                <div class="col-2"><button class="btn btn-secondary text-center" type="submit" name="filter">Filtrar</button></div>
+                            </div>
+                        </p>
+                        <p>
+                            
+                        </p>
+                        <p>
+                            <label for="id_query">Colaboradores seleccionados:</label>
+                            {% if colabFilter %}<h4><b>Filtro:</b> <div class="badge badge-primary p-2">{{ colabFilter }}</div></h4>{% endif %}
+                            <h2><i class="fas fa-street-view"></i> <span class="text-success">{{ colaborators|length }}</span> de <span class="text-primary">{{ totalColab }}</span> - ({{colabPercentage}}%)</h2>
+                        </p>
+
+                        <button class="btn btn-success text-center pull-right mt-2" type="submit" name="distribute">Distribuir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

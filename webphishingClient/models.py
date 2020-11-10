@@ -3,6 +3,7 @@ from django_celery_results.models import TaskResult
 
 import uuid, random
 from datetime import datetime
+from django.utils import timezone
 
 class Colaborator(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -94,6 +95,7 @@ class Campaign(models.Model):
     # Data
     image_tracking = models.ImageField(upload_to=upload_to_uuid_campaign_folder, blank=True)
     html_text = models.TextField(blank=True)
+    subject_text = models.TextField(default='')
 
     def __str__(self):
         return self.name
@@ -104,6 +106,10 @@ class Campaign(models.Model):
 
     def getSent(self):
         colaborators = self.colaborators.filter(colaboratorcampaign__sent__isnull=False)
+        return colaborators
+
+    def getUnsent(self):
+        colaborators = self.colaborators.filter(colaboratorcampaign__sent__isnull=True)
         return colaborators
 
     def getClicked(self):
@@ -141,9 +147,38 @@ class ColaboratorCampaign(models.Model):
     
     # User tracking data
     sent = models.DateTimeField(blank=True, null=True)
+    sent_extradata = models.TextField(default = '', blank = True, null = True)
+
     clicked = models.DateTimeField(blank=True, null = True)
+    clicked_extradata = models.TextField(default = '', blank = True, null = True)
+    
     opened = models.DateTimeField(blank=True, null = True)
+    opened_extradata = models.TextField(default = '', blank = True, null = True)
+
     compromised = models.DateTimeField(blank=True, null = True)
+    compromised_extradata = models.TextField(default = '', blank = True, null = True)
+
+    def setStage(self, stage, extra_data):
+        if stage not in ["sent", "open", "clicked", "compromised"]:
+            return False
+        else:
+            if stage == "sent":
+                self.sent = timezone.now()
+                self.sent_extradata = f'{timezone.now()}\n' + extra_data + '\n --------- \n' + self.sent_extradata
+            elif stage == "open":
+                self.opened = timezone.now()
+                self.opened_extradata = f'{timezone.now()}\n' + extra_data + '\n --------- \n' + self.opened_extradata
+            elif stage == "clicked":
+                self.clicked = timezone.now()
+                self.clicked_extradata = f'{timezone.now()}\n' + extra_data + '\n --------- \n' + self.clicked_extradata
+            elif stage == "compromised":
+                self.compromised = timezone.now()
+                self.compromised_extradata = f'{timezone.now()}\n' + extra_data + '\n --------- \n' + self.compromised_extradata
+            else:
+                return False
+
+            self.save()
+            return True
 
     @staticmethod
     def Get(colabId, campId):
@@ -154,46 +189,7 @@ class ColaboratorCampaign(models.Model):
 
     @staticmethod
     def Exists(colabId, campId):
-        return ColaboratorCampaign.objects.filter(colaborator = colabId, campaign = campId).exists()
-
-
-'''
-class exerciseModel(models.Model):
-    client = models.ForeignKey('clientModel', on_delete = models.CASCADE)
-    campaigns = models.ManyToManyField('campaignModel', blank=True)
-    name = models.CharField(max_length = 100)
-    description = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
-class employeesModel(models.Model):
-
-    exercise = models.ForeignKey('exerciseModel', on_delete = models.CASCADE)
-    email = models.EmailField()
-    company = models.CharField(max_length=100)
-    data = models.TextField()
-    
-    received = models.BooleanField(default=False)
-    read = models.BooleanField(default=False)
-    click = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.email
-
-class campaignModel(models.Model):
-
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-
-    subject = models.CharField(max_length=100)
-    body = models.TextField()
-
-    def __str__(self):
-        return self.name
-
-class csvModel(models.Model):
-
-    csvfile = models.FileField(validators=[FileExtensionValidator(['csv'])])
-'''
+        if len(ColaboratorCampaign.objects.filter(colaborator = colabId, campaign = campId)) > 0:
+            return True
+        else:
+            return False

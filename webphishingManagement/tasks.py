@@ -1,5 +1,5 @@
 from celery import shared_task
-from webphishingClient.models import ClientFiles, Colaborator
+from webphishingClient.models import ClientFiles, Colaborator, ColaboratorCampaign, Campaign
 from webphishingAuth.models import ClientModel
 
 import pandas as pd
@@ -61,6 +61,47 @@ def CreateUsersFromXLS(client_pk, document_pk):
 
     results['users_added'] = user_added
     results['users_ignored'] = users_ignored
+    results['status'] = "SUCCESS"
+
+    return results
+
+@shared_task
+def DistributeUsersTask(client_pk, campaign_pk, colaboratorQueryset):
+    results = {}
+    results['status'] = ""
+    results['errors'] = []
+
+    # Client
+    client = ClientModel.getClient(client_pk)
+    if client is None:
+        results['status'] = "FAILED"
+        results['errors'].append("El cliente seleccionado no existe.")
+        return results
+
+    # Campaign
+    campaign = Campaign.Get(campaign_pk)
+    if campaign is None:
+        results['status'] = "FAILED"
+        results['errors'].append("La campaña seleccionada no existe.")
+        return results
+
+    # Colaborators
+    colaboratorsList = client.getFilteredColaborators(colaboratorQueryset)
+
+    colaborator_already_in_campaign = 0
+    colaborator_added = 0
+    for colaborator in colaboratorsList:
+        if not ColaboratorCampaign.Exists(colaborator.pk, campaign.pk):
+            cc = ColaboratorCampaign()
+            cc.colaborator = colaborator
+            cc.campaign = campaign
+            cc.save()
+            colaborator_added += 1
+        else:
+            colaborator_already_in_campaign += 1
+
+    results['colaborators_added'] = colaborator_added
+    results['colaborators_already_present'] = colaborator_already_in_campaign
     results['status'] = "SUCCESS"
 
     return results

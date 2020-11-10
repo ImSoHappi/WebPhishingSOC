@@ -19,6 +19,7 @@ urlpatterns = [
     # CLIENT - EXERCISE
     path('<str:client_pk>/exercise/add', views.client_exercise_crud, name='management_client_exercise_add'),
     path('<str:client_pk>/exercise/<str:exercise_pk>', views.client_exercise_crud, name='management_client_exercise_edit'),
+    path('<str:client_pk>/exercise/<str:exercise_pk>/distribute_users', views.client_exercise_distribute_users, name='management_client_exercise_distribute_users'),
     
     # CLIENT - EXERCISE - CAMPAIGN
     path('<str:client_pk>/exercise/<str:exercise_pk>/campaign/add', views.client_campaign_crud, name='management_client_campaign_add'),

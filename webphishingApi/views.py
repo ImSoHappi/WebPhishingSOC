@@ -12,6 +12,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from django.contrib.auth.decorators import login_required
 
+import base64
+
 @api_view(['POST'])
 @csrf_exempt
 @required_fields((
@@ -19,6 +21,7 @@ from django.contrib.auth.decorators import login_required
     ("colaboratorId", "webphishingClient.models.Colaborator"),
     ("campaignId", "webphishingClient.models.Campaign"),
     ("stage", ["sent", "open", "clicked", "compromised"]),
+    ("extra_data", None)
 ))
 def api_ex_reportSent(request):
     # Check needed fields
@@ -45,8 +48,48 @@ def api_ex_reportSent(request):
 
         # Register mailsent
         ccObj = ColaboratorCampaign.Get(colaborator, campaign)
-        ccObj.setStatus("sent")
+        if ccObj.setStage(request.stage, request.extra_data):
+            context['messages'].append(f"Stage {request.stage} changed successfully")
+        else:
+            context['messages'].append(f"Stage {request.stage} could not be processed")
+            context['result'] = "FAILED"
 
+    return JsonResponse(context)
+
+@api_view(['POST'])
+@csrf_exempt
+@required_fields((
+    ("campaignId", "webphishingClient.models.Campaign"),
+    ("type", ["all", "unsent", "sent"]),
+))
+def api_ex_get_campaignData(request):
+    context = {}
+    context['errors'] = []
+    context['result'] = ""
+    context['messages'] = []
+
+    # ###########
+    # Load obj
+    campaign = Campaign.Get(request.campaignId)
+
+    if request.type == "all":
+        colaborators = campaign.getSigned()
+    elif request.type == "unsent":
+        colaborators = campaign.getUnsent()
+    elif request.type == "sent":
+        colaborators = campaign.getSent()
+
+    mails = []
+    for colaborator in colaborators:
+        mails.append((colaborator.pk, colaborator.email))
+
+    context['result'] = "SUCCESS"
+    context['mails'] = mails
+    context['subject'] = campaign.subject_text
+    context['html'] = campaign.html_text
+    context['campaign_name'] = campaign.name
+
+    context['mail_count'] = len(mails)
     return JsonResponse(context)
 
 '''

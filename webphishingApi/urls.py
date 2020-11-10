@@ -3,6 +3,7 @@ from webphishingApi import views
  
 urlpatterns = [ 
     path('ex/reportSent', views.api_ex_reportSent, name='api_ex_reportSent'),
+    path('ex/getCampaignData', views.api_ex_get_campaignData, name='api_ex_get_campaignData'),
     #path('api/gethooks', views.api_gethooks, name='api_gethooks'),
     #path('api/posthooks', views.api_posthooks, name='api_posthooks'),
     #path('fishinghooks_list/', views.fishinghook_list , name='fishinghook_list'),

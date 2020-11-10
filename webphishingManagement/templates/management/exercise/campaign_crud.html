@@ -77,7 +77,10 @@
                         {% if campaign.getCampaignResults|length > 0 %}
                             {% for results in campaign.getCampaignResults %}
                             <tr style="text-align: center;">
-                                <td>{{ results.colaborator.first_name }}</td>
+                                <td>{{ results.colaborator.first_name }}
+                                    <br/>
+                                    {{ results.colaborator.pk }}
+                                </td>
                                 <td>{{ results.colaborator.last_name }}</td>
                                 <td>{{ results.colaborator.email }}</td>
 

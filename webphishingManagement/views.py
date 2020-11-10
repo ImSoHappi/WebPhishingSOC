@@ -14,7 +14,7 @@ import numpy as np
 import csv 
 
 from .forms import *
-from .tasks import CreateUsersFromXLS
+from .tasks import CreateUsersFromXLS, DistributeUsersTask
 
 # Create your views here.
 @login_required
@@ -230,6 +230,65 @@ def client_exercise_crud(request, client_pk, exercise_pk = None):
     context['form'] = form
     context['client'] = client
     return render(request, 'management/exercise/crud.html', context)
+
+@login_required
+def client_exercise_distribute_users(request, client_pk, exercise_pk):
+    context = {}
+
+    client = ClientModel.getClient(client_pk)
+    if client is None:
+        messages.error(request, "El cliente seleccionado no existe.")
+        return redirect('management_client_list')
+
+    exercise = client.getExerciseById(exercise_pk)
+    if exercise is None:
+        messages.error(request, "El ejercicio seleccionado no existe.")
+        return redirect('management_client_view', client_pk = client.pk)
+
+    ## Get colaborators from client
+    campaigns = exercise.getCampanas()
+    totalColab = client.getColaborators().count()
+    availableFields = client.getColaboratorFilters()
+
+    # Apply filter
+    if request.method == "POST":
+        form = DistributeClientUsersForm(request.POST)
+        form.fields['campaign'].queryset = campaigns
+
+        if form.is_valid():
+            # Get campaign
+            campaignId = request.POST.get("campaign", None)
+
+            # Filter colabns
+            colabFilter = request.POST.get('query', None)
+            context['colabFilter'] = colabFilter
+            colaborators = client.getFilteredColaborators(colabFilter)
+
+            if not "filter" in request.POST:
+                task = DistributeUsersTask.delay(client.pk, campaignId, colabFilter)
+                client.last_task = task
+                client.save()
+
+                messages.success(request, "Distribución en progreso...")
+                return redirect('management_client_view', client_pk = client.pk)
+            
+        else:
+            colaborators = client.getColaborators()
+    else:
+        colaborators = client.getColaborators()
+        form = DistributeClientUsersForm()
+        form.fields['campaign'].queryset = campaigns
+    
+
+    ## Build form
+    context['availableFields'] = availableFields
+    context['colaborators'] = colaborators
+    context['totalColab'] = totalColab
+    context['colabPercentage'] = round(colaborators.count() / totalColab * 100, 2)
+    context['campaigns'] = campaigns
+    context['client'] = client
+    context['form'] = form
+    return render(request, 'management/exercise/distribute_users.html', context = context)
 
 @login_required
 def client_campaign_crud(request, client_pk, exercise_pk, campaign_pk = None):

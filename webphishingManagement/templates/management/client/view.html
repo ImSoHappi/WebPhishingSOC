@@ -165,6 +165,7 @@
 
 
                                                     <a href="{% url 'management_client_campaign_add' client_pk=client.pk exercise_pk=ejercicio.pk %}"><button class="btn btn-success pull-right mr-2"><span class="btn-label"><i class="far fa-plus-square"></i></span></button></a> 
+                                                    <a href="{% url 'management_client_exercise_distribute_users' client_pk=client.pk exercise_pk=ejercicio.pk %}"><button class="btn btn-secondary pull-right mr-2"><span class="btn-label"><i class="fas fa-drafting-compass"></i></span></button></a> 
                                                 </div>
                                                 <span class="badge badge-primary">{{ ejercicio.get_status_display }}</span>
                                                 {{ ejercicio.planification_date }}
@@ -187,7 +188,9 @@
                                                         {% for campana in ejercicio.getCampanas %}
                                                         <tr style="text-align: center;">
                                                             <td style="text-align: left !important;">
-                                                                <a href="{% url 'management_client_campaign_edit' client_pk=client.pk exercise_pk=ejercicio.pk campaign_pk=campana.pk %}">{{ campana }}</a></td>
+                                                                <a href="{% url 'management_client_campaign_edit' client_pk=client.pk exercise_pk=ejercicio.pk campaign_pk=campana.pk %}">{{ campana }}</a><br/>
+                                                                <small>{{ campana.pk }}</small>
+                                                            </td>
                                                             <td>{{ campana.getSigned|length }}</td>
                                                             <td>{{ campana.getSent|length }}</td>
                                                             <td>{{ campana.getOpened|length }}</td>

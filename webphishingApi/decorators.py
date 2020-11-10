@@ -47,7 +47,17 @@ def required_fields(required_list):
                 elif type(model) is list:
                     value = request.POST.get(variable)
                     if value not in model:
-                        return HttpResponse(f'{variable}, value not valid nor found.', status=500) 
+                        return HttpResponse(f'{variable}, value not valid nor found.', status=500)
+                    else:
+                        setattr(request, variable, value)
+
+                # Check if free data
+                elif model is None:
+                    if variable not in request.POST:
+                        return HttpResponse(f'Needed data is not present.', status=500)
+
+                    value = request.POST.get(variable)
+                    setattr(request, variable, value)
                     
             return view_method(request, *args, **kwargs)            
                 
