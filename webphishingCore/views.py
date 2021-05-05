@@ -86,8 +86,8 @@ def exercise_detail(request, client_pk, exercise_pk):
             with get_connection(
                 host="smtp.live.com", 
                 port="25", 
-                username="picachus253@hotmail.com", 
-                password="s15081998", 
+                username="", 
+                password="", 
                 use_tls=True
             ) as connection:
                 EmailMultiAlternatives('diditwork?', 'test message multiemail', 'picachus253@hotmail.com', bcc=['kitivi8869@a6mail.net','sakkuliyda@enayu.com'], connection=connection).send(fail_silently=False)
