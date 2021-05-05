@@ -90,7 +90,7 @@ def exercise_detail(request, client_pk, exercise_pk):
                 password="", 
                 use_tls=True
             ) as connection:
-                EmailMultiAlternatives('diditwork?', 'test message multiemail', 'picachus253@hotmail.com', bcc=['kitivi8869@a6mail.net','sakkuliyda@enayu.com'], connection=connection).send(fail_silently=False)
+                EmailMultiAlternatives('diditwork?', 'test message multiemail', '', bcc=['kitivi8869@a6mail.net','sakkuliyda@enayu.com'], connection=connection).send(fail_silently=False)
                 return redirect('exercise_detail', client_pk=client_pk, exercise_pk=exercise_pk)
 
     context = {}
